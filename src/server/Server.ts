@@ -1,7 +1,8 @@
 import express, { Application } from 'express'
 import cors from 'cors';
 import path from 'path';
-
+import bebidasRouter from '../routes/bebida.routes'
+import marcasRouter from '../routes/marca.routes'
 
 class Server {
 
@@ -17,10 +18,15 @@ class Server {
         this.configureRoutes();
     }
 
-    middlewares() { }
+    middlewares() {
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+
+     }
 
     private configureRoutes(): void {
-
+        this.app.use('/api/bebidas',bebidasRouter)
+        this.app.use('/api/marca',marcasRouter)
     }
 
     listen() {
