@@ -1,12 +1,15 @@
 import { BebidaService } from "../services/bebidas.service";
 import { Request, Response } from "express";
+import { MarcaService } from "../services/marca.service";
 
 export class BebidaController {
 
     private bebidaService: BebidaService;
+    private marcaService : MarcaService;
 
     constructor() {
         this.bebidaService = new BebidaService();
+        this.marcaService = new MarcaService();
     }
     //controlador para obtener todos los productos
     getBebidasAll = async (req: Request, res: Response): Promise<void> => {
@@ -38,8 +41,20 @@ export class BebidaController {
     //controlador para crear una bebida
     postBebida = async (req: Request, res: Response): Promise<void> => {
         const { body } = req
+        const nameMarca = req.body.marca
+        
+
+        
         try {
-            const bebida = await this.bebidaService.postOneBebida(body)
+            //verificamos que la marca exista en la base de datos
+            const verifyMarca = await this.marcaService.getMarcaForName(nameMarca)
+            if(!verifyMarca){
+                 res.status(404).json({message:'No se encontro la marca'})
+                 return;
+            }
+
+            const bebidaData = {...req.body,marca:nameMarca}
+            const bebida = await this.bebidaService.postOneBebida(bebidaData)
             res.status(200).json(bebida);
         } catch (error) {
             res.status(500).json({ message: 'Ocurrio un error al crear la bebida' })

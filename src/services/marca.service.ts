@@ -23,7 +23,7 @@ export class MarcaService {
     }
     //servicios para crear una marca
     async createMarca(marcaData: Partial<IMarca>): Promise<IMarca> {
-        return await this.createMarca(marcaData);
+        return await this.marcaRepo.createMarca(marcaData);
     }
     //servicio para actualizar una marca
     async updateMarca(id: string, marcaData: Partial<IMarca>): Promise<IMarca | null> {
