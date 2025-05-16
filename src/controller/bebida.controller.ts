@@ -5,7 +5,7 @@ import { MarcaService } from "../services/marca.service";
 export class BebidaController {
 
     private bebidaService: BebidaService;
-    private marcaService : MarcaService;
+    private marcaService: MarcaService;
 
     constructor() {
         this.bebidaService = new BebidaService();
@@ -42,18 +42,18 @@ export class BebidaController {
     postBebida = async (req: Request, res: Response): Promise<void> => {
         const { body } = req
         const nameMarca = req.body.marca
-        
 
-        
+
+
         try {
             //verificamos que la marca exista en la base de datos
             const verifyMarca = await this.marcaService.getMarcaForName(nameMarca)
-            if(!verifyMarca){
-                 res.status(404).json({message:'No se encontro la marca'})
-                 return;
+            if (!verifyMarca) {
+                res.status(404).json({ message: 'No se encontro la marca' })
+                return;
             }
 
-            const bebidaData = {...req.body,marca:nameMarca}
+            const bebidaData = { ...req.body, marca: nameMarca }
             const bebida = await this.bebidaService.postOneBebida(bebidaData)
             res.status(200).json(bebida);
         } catch (error) {
@@ -77,6 +77,29 @@ export class BebidaController {
     }
     //controlador para eliminar una bebida
     deleteBebida = async (req: Request, res: Response): Promise<void> => {
+        const { id } = req.params
 
+        try {
+            const drinkDelete = await this.bebidaService.deleteOneBebida(id)
+            if (!drinkDelete) {
+                res.status(404).json({ message: 'No se encontro la bebida para eliminar' })
+            }
+            res.status(200).json({ message: 'Se elimino con exito' })
+        } catch (error) {
+            res.status(500).json({ message: 'Ocurrio un error al eliminar la bebida' })
+        }
+    }
+    //controlador para cambiar el estado de la bebida
+    changeStateDrink = async (req: Request, res: Response): Promise<void> => {
+        const { id } = req.params
+        try {
+            const drinkChangeState = await this.bebidaService.changeStateDrink(id);
+            if (!drinkChangeState) {
+                res.status(404).json({ message: 'No se encontro la bebida para modificar el estado' })
+            }
+            res.json(200).json({ message: 'Se modifico el estado de la bebida', drinkChangeState })
+        } catch (error) {
+
+        }
     }
 }

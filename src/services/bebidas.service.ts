@@ -29,4 +29,8 @@ export class BebidaService {
     async deleteOneBebida(id: string): Promise<boolean> {
         return await this.bebidaRepo.deleteBebida(id);
     }
+    //actualizar el estado de una bebida
+    async changeStateDrink(id:string): Promise<IBebidas | null>{
+        return await this.bebidaRepo.changeStateDrink(id)
+    }
 }
