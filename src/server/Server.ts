@@ -31,7 +31,7 @@ class Server {
 
     private configureRoutes(): void {
         this.app.use('/api/bebidas',bebidasRouter)
-        this.app.use('/api/marca',marcasRouter)
+        this.app.use('/api/marcas',marcasRouter)
     }
 
     listen() {

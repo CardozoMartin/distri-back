@@ -1,14 +1,37 @@
+import { Schema, model, Document } from 'mongoose';
 
-import mongoose, { Document, Schema } from "mongoose";
-
+// Interface for the Marca document
 export interface IMarca extends Document {
-  name: string;
-  logoImage?: string;
+  nombre: string;
+  descripcion?: string;
+  activo?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const MarcaSchema: Schema = new Schema({
-  name: { type: String, required: true, unique: true },
-  logoImage: { type: String },
-});
+// Schema definition
+const MarcaSchema = new Schema<IMarca>(
+  {
+    nombre: {
+      type: String,
+      required: [true, 'El nombre de la marca es obligatorio'],
+      unique: true, // This is creating the unique index that's causing the error
+      trim: true
+    },
+    descripcion: {
+      type: String,
+      default: ''
+    },
+    activo: {
+      type: Boolean,
+      default: true
+    }
+  },
+  {
+    timestamps: true, // Adds createdAt and updatedAt fields
+    versionKey: false // Removes __v field
+  }
+);
 
-export default mongoose.model<IMarca>('Marca', MarcaSchema);
+// Create and export the model
+export default model<IMarca>('Marca', MarcaSchema);

@@ -1,22 +1,22 @@
+
 import { Router } from 'express';
 import { MarcaController } from '../controller/marca.controller';
-
 
 const router = Router();
 const marcaController = new MarcaController();
 
-//rutas para obtener
-router.get('/', marcaController.getAllMarca)
-router.get('/', marcaController.getMarcaById)
-router.get('/', marcaController.getMarcaForName)
+// Routes for getting marca(s)
+router.get('/', marcaController.getAllMarca);
+router.get('/:id', marcaController.getMarcaById);
+router.get('/name/:name', marcaController.getMarcaForName);
 
-//rutas para crear una marca
-router.post('/', marcaController.postMarca)
+// Route for creating a marca
+router.post('/', marcaController.postMarca);
 
-//rutas para editar
-router.put('/', marcaController.putMarca)
+// Route for updating a marca
+router.put('/:id', marcaController.putMarca);
 
-//rutas para eliminar fisica o logica
-router.delete('/', marcaController.deleteMarca)
+// Route for deleting a marca
+router.delete('/:id', marcaController.deleteMarca);
 
-export default router
+export default router;
