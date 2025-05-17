@@ -53,13 +53,7 @@ export class MarcaController {
     //controlador para crear una marca
     postMarca = async (req: Request, res: Response): Promise<void> => {
         const { body } = req;
-        
-        // Validación para asegurar que nombre no sea nulo o vacío
-        if (!body.nombre) {
-            res.status(400).json({ message: 'El nombre de la marca es obligatorio' });
-            return;
-        }
-        
+        console.log(body)
         try {
             const marca = await this.marcaService.createMarca(body);
             res.status(201).json({ message: 'Marca creada con exito', marca })

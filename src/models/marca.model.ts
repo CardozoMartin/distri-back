@@ -15,8 +15,8 @@ const MarcaSchema = new Schema<IMarca>(
     nombre: {
       type: String,
       required: [true, 'El nombre de la marca es obligatorio'],
-      unique: true, // This is creating the unique index that's causing the error
-      trim: true
+      unique: true, // Make sure nombre is unique
+      index: true   // Create an index on nombre
     },
     descripcion: {
       type: String,
