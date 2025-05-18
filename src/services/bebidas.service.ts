@@ -17,6 +17,10 @@ export class BebidaService {
     async getBebidaById(id: string): Promise<IBebidas | null> {
         return await this.bebidaRepo.findByIdBebida(id);
     }
+    //obtener bebidas por el nombre de marca
+    async getBebidaForMarca(marca:string):Promise<IBebidas[]> {
+        return await this.bebidaRepo.findDrinkForMarc(marca)
+    }
     //servicios para crear una bebida
     async postOneBebida(bebidaData: Partial<IBebidas>): Promise<IBebidas> {
         return await this.bebidaRepo.createBebida(bebidaData)

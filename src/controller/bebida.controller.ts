@@ -38,6 +38,21 @@ export class BebidaController {
             })
         }
     }
+
+    //controlador para obtener las bebidas por marca
+    getBebidasForMarca = async (req:Request, res:Response):Promise<void> =>{
+        const { marca } = req.params
+        
+        try {
+            const bebidas = await this.bebidaService.getBebidaForMarca(marca)
+            if(!bebidas){
+                res.status(404).json({message:'No se encontro ningun producto con esta marca'})
+            }
+            res.status(200).json({message:'Se encontro los siguientes productos',bebidas})
+        } catch (error) {
+            res.status(500).json({message:'ocurrio un error',error})
+        }
+    }
     //controlador para crear una bebida
     postBebida = async (req: Request, res: Response): Promise<void> => {
         const { body } = req

@@ -8,10 +8,20 @@ export interface IBebidasRepository {
     updateBebida(id: string, bebidaData: Partial<IBebidas>): Promise<IBebidas | null>
     deleteBebida(id: string): Promise<boolean>;
     changeStateDrink(id: string): Promise<IBebidas | null>;
+    findDrinkForMarc(name:string):Promise<IBebidas[]>
 
 }
 
 export class BebidaRepository implements IBebidasRepository {
+   async findDrinkForMarc(name: string): Promise<IBebidas[]> {
+        try {             
+       
+        return await Bebida.find({ marca: name });
+    } catch (error) {             
+        console.error("Error finding bebidas by marca:", error);             
+        return [];         
+    }     
+    }
     //repositorio para buscar una bebida por id
     async findByIdBebida(id: string): Promise<IBebidas | null> {
         try {
