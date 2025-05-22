@@ -6,7 +6,7 @@ dotenv.config();
 
 const connectDB = async (): Promise<void> => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/productos_db');
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://martincardozo1993xp:wCqSETzkYhwSSpk3@cluster-63i.bkvhzgl.mongodb.net/bahia?retryWrites=true&w=majority&appName=Cluster-63i');
     console.log(`MongoDB conectado: ${conn.connection.host}`);
   } catch (error: unknown) {
     // Manejar el error correctamente verificando su tipo
