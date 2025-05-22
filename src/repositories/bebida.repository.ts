@@ -1,6 +1,5 @@
 import Bebida, { IBebidas } from "../models/bebidas.model";
 
-
 export interface IBebidasRepository {
     findAllBebida(): Promise<IBebidas[]>;
     findByIdBebida(id: string): Promise<IBebidas | null>;
@@ -8,20 +7,21 @@ export interface IBebidasRepository {
     updateBebida(id: string, bebidaData: Partial<IBebidas>): Promise<IBebidas | null>
     deleteBebida(id: string): Promise<boolean>;
     changeStateDrink(id: string): Promise<IBebidas | null>;
-    findDrinkForMarc(name:string):Promise<IBebidas[]>
-
+    findDrinkForMarc(name: string): Promise<IBebidas[]>;
+    decreaseStock(id: string, quantity: number): Promise<IBebidas | null>;
+    increaseStock(id: string, quantity: number): Promise<IBebidas | null>;
 }
 
 export class BebidaRepository implements IBebidasRepository {
-   async findDrinkForMarc(name: string): Promise<IBebidas[]> {
-        try {             
-       
-        return await Bebida.find({ marca: name });
-    } catch (error) {             
-        console.error("Error finding bebidas by marca:", error);             
-        return [];         
-    }     
+    async findDrinkForMarc(name: string): Promise<IBebidas[]> {
+        try {
+            return await Bebida.find({ marca: name });
+        } catch (error) {
+            console.error("Error finding bebidas by marca:", error);
+            return [];
+        }
     }
+
     //repositorio para buscar una bebida por id
     async findByIdBebida(id: string): Promise<IBebidas | null> {
         try {
@@ -31,6 +31,7 @@ export class BebidaRepository implements IBebidasRepository {
             return null;
         }
     }
+
     //repositorio para crear una bebida
     async createBebida(bebidaData: Partial<IBebidas>): Promise<IBebidas> {
         try {
@@ -41,6 +42,7 @@ export class BebidaRepository implements IBebidasRepository {
             throw error;
         }
     }
+
     //repositorio para actualizar una bebida
     async updateBebida(id: string, bebidaData: Partial<IBebidas>): Promise<IBebidas | null> {
         try {
@@ -50,6 +52,7 @@ export class BebidaRepository implements IBebidasRepository {
             return null;
         }
     }
+
     //repositorio para eliminar una bebida
     async deleteBebida(id: string): Promise<boolean> {
         try {
@@ -60,7 +63,8 @@ export class BebidaRepository implements IBebidasRepository {
             return false;
         }
     }
-    //repo para obtener todas las ebidas
+
+    //repo para obtener todas las bebidas
     async findAllBebida(): Promise<IBebidas[]> {
         try {
             return await Bebida.find();
@@ -69,6 +73,7 @@ export class BebidaRepository implements IBebidasRepository {
             throw error;
         }
     }
+
     // repositorio para modificar si está activa la bebida
     async changeStateDrink(id: string): Promise<IBebidas | null> {
         try {
@@ -93,4 +98,54 @@ export class BebidaRepository implements IBebidasRepository {
         }
     }
 
+    // repositorio para descontar stock
+    async decreaseStock(id: string, quantity: number): Promise<IBebidas | null> {
+        try {
+            // Buscar la bebida actual
+            const bebida = await Bebida.findById(id);
+            if (!bebida) {
+                throw new Error(`Bebida con ID ${id} no encontrada`);
+            }
+
+            // Verificar que hay suficiente stock
+            if (bebida.stock < quantity) {
+                throw new Error(`Stock insuficiente. Stock actual: ${bebida.stock}, cantidad solicitada: ${quantity}`);
+            }
+
+            // Actualizar el stock
+            const nuevoBebida = await Bebida.findByIdAndUpdate(
+                id,
+                { $inc: { stock: -quantity } }, // Usar $inc para operación atómica
+                { new: true }
+            );
+
+            return nuevoBebida;
+        } catch (error) {
+            console.error('Error al descontar stock:', error);
+            throw error;
+        }
+    }
+
+    // repositorio para aumentar stock
+    async increaseStock(id: string, quantity: number): Promise<IBebidas | null> {
+        try {
+            // Verificar que la bebida existe
+            const bebida = await Bebida.findById(id);
+            if (!bebida) {
+                throw new Error(`Bebida con ID ${id} no encontrada`);
+            }
+
+            // Actualizar el stock
+            const nuevoBebida = await Bebida.findByIdAndUpdate(
+                id,
+                { $inc: { stock: quantity } }, // Usar $inc para operación atómica
+                { new: true }
+            );
+
+            return nuevoBebida;
+        } catch (error) {
+            console.error('Error al aumentar stock:', error);
+            throw error;
+        }
+    }
 }
