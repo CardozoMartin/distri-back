@@ -1,7 +1,7 @@
 import { IBebidas } from "../models/bebidas.model";
 import { BebidaRepository, IBebidasRepository } from "../repositories/bebida.repository";
 
-export class BebidaService {
+export class BebidaService { 
     private bebidaRepo: IBebidasRepository;
 
     constructor(bebidasRepo?: IBebidasRepository) {

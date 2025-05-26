@@ -7,8 +7,8 @@ export interface IClientesRepository {
     findByEmailClient(email: string): Promise<ICliente | null>;
     findByPhoneClient(phone: string): Promise<ICliente | null>;
     findByDocumentClient(document: string): Promise<ICliente | null>;
-    createClient(client: ICliente): Promise<ICliente>;
-    updateClient(id: string, client: ICliente): Promise<ICliente | null>;
+    createClient(clienteData: Partial<ICliente>): Promise<ICliente>;
+    updateClient(id: string, clienteData: Partial<ICliente>): Promise<ICliente | null>;
     deleteClient(id: string): Promise<boolean>;
 }
 
@@ -45,9 +45,9 @@ export class ClientesRepository implements IClientesRepository {
             return null;
         }
     }
-    async findByDocumentClient(document: string): Promise<ICliente | null> {
+    async findByDocumentClient(dni: string): Promise<ICliente | null> {
         try {
-            return await Cliente.findOne({ document: document });
+            return await Cliente.findOne({ dni: dni });
         } catch (error) {
             console.error("Error al obtener el cliente por documento");
             return null
