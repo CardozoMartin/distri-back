@@ -4,6 +4,7 @@ import Bebida from "../models/bebidas.model";
 export interface ICartRepository {
     createCart(cartData: Partial<ICart>): Promise<ICart>;
     findCartById(id: string): Promise<ICart | null>;
+    findAllCarts(): Promise<ICart[]>; // Agrega este méto
     updateCart(id: string, cartData: Partial<ICart>): Promise<ICart | null>;
     deleteCart(id: string): Promise<boolean>;
     verifyProductsAvailability(productos: Array<{ id: string, quantity: number }>): Promise<{
@@ -29,6 +30,14 @@ export class CartRepository implements ICartRepository {
         } catch (error) {
             console.error("Error al buscar el carrito:", error);
             return null;
+        }
+    }
+    async findAllCarts(): Promise<ICart[]> {
+        try {
+            return await Cart.find();
+        } catch (error) {
+            console.error("Error al buscar todos los carritos:", error);
+            return [];
         }
     }
 

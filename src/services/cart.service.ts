@@ -126,6 +126,15 @@ export class CartService {
             throw error;
         }
     }
+    // Obtener todos los carritos
+    async getAllCarts(): Promise<ICart[]> {
+        try {
+            return await this.cartRepository.findAllCarts();
+        } catch (error) {
+            console.error("Error en getAllCarts service:", error);
+            throw error;
+        }
+    }
 
     // Actualizar un carrito
     async updateCart(id: string, cartData: Partial<ICart>): Promise<ICart | null> {

@@ -55,6 +55,24 @@ export class CartController {
             });
         }
     }
+    // Obtener todos los carritos
+    async getAllCarts(req: Request, res: Response) {
+        try {
+            const carts = await this.cartService.getAllCarts();
+
+            return res.status(200).json({
+                success: true,
+                data: carts
+            });
+
+        }   catch (error: any) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener los carritos',
+                error: error.message
+            });
+        }
+    }
 
     // Actualizar un carrito
     async updateCart(req: Request, res: Response) {
