@@ -73,6 +73,32 @@ export class CartController {
             });
         }
     }
+    //controlador para obtener los carritos por usuario
+    async getCartByUserId(req: Request, res: Response) {
+        try {
+            const { userId } = req.params;
+            const carts = await this.cartService.getCartsByUserId(userId);
+
+            if (!carts) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Carritos no encontrados'
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                data: carts
+            });
+
+        }   catch (error: any) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener los carritos',
+                error: error.message
+            });
+        }
+    }
 
     // Actualizar un carrito
     async updateCart(req: Request, res: Response) {

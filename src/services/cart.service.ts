@@ -136,6 +136,16 @@ export class CartService {
         }
     }
 
+    // obtener los carritos por usuario
+    async getCartsByUserId(userId: string): Promise<ICart[]> {
+        try {
+            return await this.cartRepository.findCartByUserId(userId);
+        } catch (error) {
+            console.error("Error en getCartsByUserId service:", error);
+            throw error;
+        }
+    }
+
     // Actualizar un carrito
     async updateCart(id: string, cartData: Partial<ICart>): Promise<ICart | null> {
         try {

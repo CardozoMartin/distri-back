@@ -18,6 +18,9 @@ router.get('/:id', (req, res) => {
 router.get('/', (req, res) => {
     cartController.getAllCarts(req, res);
 });
+router.get('/user/:userId', (req, res) => {
+    cartController.getCartByUserId(req, res);
+});
 
 // Ruta para actualizar un carrito
 // PUT /api/cart/:id
