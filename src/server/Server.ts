@@ -5,6 +5,7 @@ import bebidasRouter from '../routes/bebida.routes'
 import marcasRouter from '../routes/marca.routes'
 import cartRouter from '../routes/cart.routes'
 import clienteRouter from '../routes/cliente.routes'
+import empleadoRouter from '../routes/empleados.routes'
 
 class Server {
 
@@ -36,6 +37,7 @@ class Server {
         this.app.use('/api/marcas',marcasRouter)
         this.app.use('/api/cart',cartRouter)
         this.app.use('/api/clientes',clienteRouter)
+        this.app.use('/api/empleados',empleadoRouter)
     }
 
     listen() {
