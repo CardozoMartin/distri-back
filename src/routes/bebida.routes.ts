@@ -12,7 +12,7 @@ router.get('/:id', bebidaController.getBebidasById);
 router.get('/allbebidas/:marca', bebidaController.getBebidasForMarca)
 //rutas para crear una bebida
 
-router.post('/', bebidaController.postBebida);
+router.post('/',bebidaController.postBebida);
 
 //rutas para editar o actualizar una bebida
 
