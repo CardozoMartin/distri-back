@@ -70,7 +70,8 @@ class Server {
                     'http://localhost:5173',
                     'http://127.0.0.1:5173',
                     'http://localhost:3000',
-                    'http://127.0.0.1:3000'
+                    'http://127.0.0.1:3000',
+                    'https://vhbpfn9n-5173.brs.devtunnels.ms'
                 ],
                 methods: ['GET', 'POST'],
                 credentials: true
@@ -92,7 +93,8 @@ class Server {
                 'http://localhost:5173',
                 'http://127.0.0.1:5173',
                 'http://localhost:3000',
-                'http://127.0.0.1:3000'
+                'http://127.0.0.1:3000',
+                'https://vhbpfn9n-5173.brs.devtunnels.ms'
             ],
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
             credentials: true,
