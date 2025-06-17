@@ -4,10 +4,13 @@ import cors from 'cors';
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import path from 'path';
-import bebidasRouter from '../routes/bebida.routes';
-import marcasRouter from '../routes/marca.routes';
-import cartRouter from '../routes/cart.routes';
-import clienteRouter from '../routes/cliente.routes';
+
+import bebidasRouter from '../routes/bebida.routes'
+import marcasRouter from '../routes/marca.routes'
+import cartRouter from '../routes/cart.routes'
+import clienteRouter from '../routes/cliente.routes'
+import empleadoRouter from '../routes/empleados.routes'
+
 
 // Singleton para manejar WebSocket globalmente
 export class SocketManager {
@@ -100,12 +103,7 @@ class Server {
         this.app.use(express.urlencoded({ extended: true }));
     }
 
-    private configureRoutes(): void {
-        this.app.use('/api/bebidas', bebidasRouter);
-        this.app.use('/api/marcas', marcasRouter);
-        this.app.use('/api/cart', cartRouter);
-        this.app.use('/api/clientes', clienteRouter);
-    }
+  
 
     private configureSocket(): void {
         this.io.on('connection', (socket) => {
@@ -124,6 +122,13 @@ class Server {
                 console.log('Cliente desconectado:', socket.id);
             });
         });
+
+        this.app.use('/api/bebidas',bebidasRouter)
+        this.app.use('/api/marcas',marcasRouter)
+        this.app.use('/api/cart',cartRouter)
+        this.app.use('/api/clientes',clienteRouter)
+        this.app.use('/api/empleados',empleadoRouter)
+
     }
 
     listen() {
