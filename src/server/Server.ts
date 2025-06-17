@@ -103,7 +103,13 @@ class Server {
         this.app.use(express.urlencoded({ extended: true }));
     }
 
-  
+    configureRoutes() {
+        this.app.use('/api/bebidas', bebidasRouter);
+        this.app.use('/api/marcas', marcasRouter);
+        this.app.use('/api/cart', cartRouter);
+        this.app.use('/api/clientes', clienteRouter);
+        this.app.use('/api/empleados', empleadoRouter);
+    }
 
     private configureSocket(): void {
         this.io.on('connection', (socket) => {
@@ -122,13 +128,6 @@ class Server {
                 console.log('Cliente desconectado:', socket.id);
             });
         });
-
-        this.app.use('/api/bebidas',bebidasRouter)
-        this.app.use('/api/marcas',marcasRouter)
-        this.app.use('/api/cart',cartRouter)
-        this.app.use('/api/clientes',clienteRouter)
-        this.app.use('/api/empleados',empleadoRouter)
-
     }
 
     listen() {
@@ -140,4 +139,3 @@ class Server {
 }
 
 export default Server;
-export { SocketManager };
