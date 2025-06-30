@@ -14,6 +14,7 @@ export class CartController {
     async createCart(req: Request, res: Response) {
         try {
             const cartData = req.body;
+            console.log('Datos del carrito:', cartData);
             const newCart = await this.cartService.createCart(cartData);
             
             return res.status(201).json({
