@@ -156,7 +156,13 @@ export class ClienteController {
                 res.status(400).json({ message: 'Los datos del cliente son requeridos' });
                 return;
             }
-
+            
+            // Verificamos si el email ya existe
+            if (!clienteData.email || !clienteData.email.includes('@')) {
+                res.status(400).json({ message: 'Email es requerido y debe ser válido' });
+                return;
+            }
+            
             const nuevoCliente = await this.clienteServ.createCliente(clienteData);
 
             res.status(201).json({
@@ -168,23 +174,45 @@ export class ClienteController {
 
             // Manejo específico de errores de validación
             if (error instanceof Error) {
-                if (error.message.includes('Ya existe')) {
+                // Error de duplicado (email, documento o teléfono ya existente)
+                if (error.message.includes('Ya existe un cliente con este email')) {
                     res.status(409).json({
-                        message: error.message
+                        message: 'El email ya está en uso. Por favor, utiliza un email diferente.',
+                        error: 'DUPLICATE_EMAIL',
+                        details: 'Ya existe un cliente registrado con este email'
                     });
                     return;
                 }
 
+                if (error.message.includes('Ya existe un cliente con este documento')) {
+                    res.status(409).json({
+                        message: 'Ya existe un cliente registrado con este documento',
+                        error: 'DUPLICATE_DOCUMENT'
+                    });
+                    return;
+                }
+
+                if (error.message.includes('Ya existe un cliente con este teléfono')) {
+                    res.status(409).json({
+                        message: 'Ya existe un cliente registrado con este teléfono',
+                        error: 'DUPLICATE_PHONE'
+                    });
+                    return;
+                }
+
+                // Errores de validación general
                 if (error.message.includes('requerido') || error.message.includes('válido')) {
                     res.status(400).json({
-                        message: error.message
+                        message: error.message,
+                        error: 'VALIDATION_ERROR'
                     });
                     return;
                 }
             }
 
+            // Error interno del servidor
             res.status(500).json({
-                message: "Error al crear el cliente",
+                message: "Error interno al crear el cliente",
                 error: error instanceof Error ? error.message : 'Error desconocido'
             });
         }
