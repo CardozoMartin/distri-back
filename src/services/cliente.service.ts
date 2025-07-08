@@ -32,38 +32,9 @@ export class ClienteService {
     }
     // Servicio para crear un cliente
     async createCliente(clienteData: Partial<ICliente>): Promise<ICliente> {
-        // Validaciones básicas
-        if (!clienteData) {
-            throw new Error('Los datos del cliente son requeridos');
-        }
-
-        // Validar campos requeridos (ajusta según tu modelo)
-        if (!clienteData.email && !clienteData.dni && !clienteData.phone) {
-            throw new Error('Al menos uno de los siguientes campos es requerido: email, documento o teléfono');
-        }
-
+      
         try {
-            // Verificar si ya existe un cliente con el mismo email/documento/teléfono
-            if (clienteData.email) {
-                const existingByEmail = await this.getClienteForEmail(clienteData.email);
-                if (existingByEmail) {
-                    throw new Error('Ya existe un cliente con este email');
-                }
-            }
-
-            if (clienteData.dni) {
-                const existingByDoc = await this.getClienteForDocumente(clienteData.dni);
-                if (existingByDoc) {
-                    throw new Error('Ya existe un cliente con este documento');
-                }
-            }
-
-            if (clienteData.phone) {
-                const existingByPhone = await this.getClienteForPhone(clienteData.phone);
-                if (existingByPhone) {
-                    throw new Error('Ya existe un cliente con este teléfono');
-                }
-            }
+           
 
             return await this.clienteRepo.createClient(clienteData);
         } catch (error) {

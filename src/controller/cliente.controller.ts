@@ -152,16 +152,9 @@ export class ClienteController {
         try {
             const clienteData = req.body;
 
-            if (!clienteData || Object.keys(clienteData).length === 0) {
-                res.status(400).json({ message: 'Los datos del cliente son requeridos' });
-                return;
-            }
+           
             
-            // Verificamos si el email ya existe
-            if (!clienteData.email || !clienteData.email.includes('@')) {
-                res.status(400).json({ message: 'Email es requerido y debe ser válido' });
-                return;
-            }
+           
             
             const nuevoCliente = await this.clienteServ.createCliente(clienteData);
 
