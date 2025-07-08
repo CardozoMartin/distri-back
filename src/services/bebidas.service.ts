@@ -1,13 +1,27 @@
 import { IBebidas } from "../models/bebidas.model";
 import { BebidaRepository, IBebidasRepository } from "../repositories/bebida.repository";
 
+interface ModelBebida {
+    name:string;
+    marca:string;
+    price:number;
+    stock:number;
+}
 export class BebidaService { 
     private bebidaRepo: IBebidasRepository;
 
     constructor(bebidasRepo?: IBebidasRepository) {
         this.bebidaRepo = bebidasRepo || new BebidaRepository()
     }
-
+    private DetailDrinks(bebida: ModelBebida) {
+        // Lógica para detallar una bebida
+        return {
+            name: bebida.name,
+            marca: bebida.marca,
+            price: bebida.price,
+            stock: bebida.stock
+        };
+    }
     //servicios para obtener todas las bebidas
     async getAllBebidas(): Promise<IBebidas[]> {
         return await this.bebidaRepo.findAllBebida();
@@ -131,5 +145,14 @@ export class BebidaService {
         }
 
         return { successful, failed };
+    }
+
+
+
+    //servicio para obtener las bebidas que tenga un stock bajo 10 unidades
+    async getDrinksWithLowStock(): Promise<IBebidas[]> {
+        const Drinks = await this.bebidaRepo.findAllBebida();
+        const lowStockDrinks = Drinks.map(drink => this.DetailDrinks(drink)).filter(drink => drink.stock < 10);
+        return lowStockDrinks;
     }
 }

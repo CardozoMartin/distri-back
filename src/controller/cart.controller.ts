@@ -208,4 +208,71 @@ export class CartController {
             
         }
     }
+
+    //controlador para saber las cuanto se recaudo y cuantos carritos se han vendido
+    async getSalesData(req: Request, res: Response) {
+        try {
+            const salesData = await this.cartService.calculateDailySales();
+            return res.status(200).json({
+                success: true,
+                data: salesData
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener los datos de ventas',
+                error: error.message
+            });
+        }
+    }
+    //controlador para obtener y calcular las ventas con el dia anterior
+    async getSalesComparison(req: Request, res: Response) {
+        try {
+            const salesComparison = await this.cartService.calculateMonthlySalesComparison();
+            return res.status(200).json({
+                success: true,
+                data: salesComparison
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener los datos de comparación de ventas',
+                error: error.message
+            });
+        }
+    }
+
+    //controlador para cacular las ventas del mes actual
+    async getCurrentMonthSales(req: Request, res: Response) {
+        try {
+            const currentMonthSales = await this.cartService.calculateCurrentMonthSales();
+            return res.status(200).json({
+                success: true,
+                data: currentMonthSales
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener los datos de ventas del mes actual',
+                error: error.message
+            });
+        }
+    }
+
+    //controlador para calcular las ventas con el mes actual y el mes anterior
+    async getMonthlySalesComparison(req: Request, res: Response) {
+        try {
+            const monthlyComparison = await this.cartService.calculateMonthlySalesComparison();
+            return res.status(200).json({
+                success: true,
+                data: monthlyComparison
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener los datos de comparación de ventas mensuales',
+                error: error.message
+            });
+        }
+    }
 }

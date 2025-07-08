@@ -12,6 +12,18 @@ router.post('/', (req, res) => {
 
 // Ruta para obtener un carrito por ID
 // GET /api/cart/:id
+router.get('/saleforday', (req, res) => {
+    cartController.getSalesData(req, res);
+});
+router.get('/saleforweek', (req, res) => {
+    cartController.getSalesComparison(req, res);
+});
+router.get('/saleforDay', (req, res) => {
+    cartController.getCurrentMonthSales(req, res);
+});
+router.get(('/saleformonth'), (req, res) => {
+    cartController.getMonthlySalesComparison(req, res);
+});
 router.get('/:id', (req, res) => {
     cartController.getCartById(req, res);
 });
@@ -40,8 +52,8 @@ router.post('/:id/payment', (req, res) => {
     cartController.processPayment(req, res);
 });
 
-router.post('/:id/changedelivery', (req, res)=>{
-    cartController.deliveryCart(req,res);
+router.post('/:id/changedelivery', (req, res) => {
+    cartController.deliveryCart(req, res);
 })
 
 export default router;
