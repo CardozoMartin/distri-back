@@ -7,8 +7,8 @@ const bebidaController = new BebidaController();
 
 
 //rutas para obtener
+router.get('/stockbebidas/bajostock', bebidaController.getDrinksWithLowStock)
 router.get('/allbebidas', bebidaController.getBebidasAll);
-router.get('/lowstock', bebidaController.getDrinksWithLowStock)
 router.get('/:id', bebidaController.getBebidasById);
 router.get('/allbebidas/:marca', bebidaController.getBebidasForMarca)
 //rutas para crear una bebida
