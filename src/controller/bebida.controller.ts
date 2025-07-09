@@ -30,6 +30,7 @@ export class BebidaController {
             const bebida = await this.bebidaService.getBebidaById(id)
             if (!bebida) {
                 res.status(400).json({ message: 'No se encontro la bebida' })
+                return; // Agregado return aquí
             }
             res.status(200).json({ message: 'Bebida encontrada', bebida })
         } catch (error) {
@@ -115,6 +116,21 @@ export class BebidaController {
             res.json(200).json({ message: 'Se modifico el estado de la bebida', drinkChangeState })
         } catch (error) {
 
+        }
+    }
+
+    //controlador para obtener las bebidas que tenga un stock bajo 10 unidades
+    getDrinksWithLowStock = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const bebidas = await this.bebidaService.getDrinksWithLowStock();
+            console.log("Bebidas con bajo stock desde el controlador:", bebidas);
+            if (bebidas.length === 0) {
+                res.status(404).json({ message: 'No se encontraron bebidas con stock bajo 10 unidades' });
+                return;
+            }
+            res.status(200).json({ message: 'Bebidas con stock bajo 10 unidades encontradas', bebidas });
+        } catch (error) {
+            res.status(500).json({ message: 'Ocurrio un error al buscar bebidas con stock bajo', error });
         }
     }
 }

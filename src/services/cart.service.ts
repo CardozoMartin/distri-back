@@ -323,4 +323,122 @@ export class CartService {
             throw new Error(`Error actualizando stock: ${JSON.stringify(result.failed)}`);
         }
     }
+
+    //servicio para calcular las ventas cuantos pedidos se realizaron en el dia y cuando se recaudo
+    async calculateDailySales(): Promise<{ totalSales: number, totalOrders: number }> {
+        try {
+            // Obtener todos los carritos y filtrar por fecha y estado
+            const carts = await this.cartRepository.findAllCarts();
+            // Filtrar los carritos que son del día de hoy y están pagados
+            const today = new Date();
+            // Asegurarse de que la hora sea 00:00:00 para el inicio del día
+            const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            // Asegurarse de que la hora sea 23:59:59 para el final del día
+            const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            // Filtrar los carritos que son del día de hoy y están pagados
+            const dailyCarts = carts.filter(cart => cart.fecha >= startOfDay && cart.fecha < endOfDay && cart.status === "Pagado");
+            // Calcular las ventas totales y el número de pedidos
+            const totalSales = dailyCarts.reduce((sum, cart) => sum + cart.total, 0);
+            // Contar el número de pedidos
+            const totalOrders = dailyCarts.length;
+            // Retornar el total de ventas y el número de pedidos
+            return { totalSales, totalOrders };
+        } catch (error) {
+            console.error("Error en calculateDailySales service:", error);
+            throw error;
+        }
+    }
+
+    //servicio para calcular las ventas y comparar con el dia anterior
+    async calculateSalesComparison(): Promise<{ today: { totalSales: number, totalOrders: number }, yesterday: { totalSales: number, totalOrders: number } }> {
+        try {
+            // Obtener todos los carritos
+            const carts = await this.cartRepository.findAllCarts();
+
+            // Obtener la fecha de hoy y ayer
+            const today = new Date();
+            const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            const startOfYesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+            const endOfYesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Filtrar carritos de hoy y ayer
+            const todaysCarts = carts.filter(cart => cart.fecha >= startOfToday && cart.fecha < endOfToday && cart.status === "Pagado");
+            const yesterdaysCarts = carts.filter(cart => cart.fecha >= startOfYesterday && cart.fecha < endOfYesterday && cart.status === "Pagado");
+
+            // Calcular ventas y pedidos de hoy
+            const totalSalesToday = todaysCarts.reduce((sum, cart) => sum + cart.total, 0);
+            const totalOrdersToday = todaysCarts.length;
+
+            // Calcular ventas y pedidos de ayer
+            const totalSalesYesterday = yesterdaysCarts.reduce((sum, cart) => sum + cart.total, 0);
+            const totalOrdersYesterday = yesterdaysCarts.length;
+
+            return {
+                today: { totalSales: totalSalesToday, totalOrders: totalOrdersToday },
+                yesterday: { totalSales: totalSalesYesterday, totalOrders: totalOrdersYesterday }
+            };
+        } catch (error) {
+            console.error("Error en calculateSalesComparison service:", error);
+            throw error;
+        }
+    }
+    //servicio para calcular las ventas del mes actual
+    async calculateMonthlySales(): Promise<{ totalSales: number, totalOrders: number }> {
+        try {
+            // Obtener todos los carritos
+            const carts = await this.cartRepository.findAllCarts();
+
+            // Obtener la fecha actual y el inicio del mes
+            const today = new Date();
+            const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+
+            // Filtrar carritos del mes actual y que estén pagados
+            const monthlyCarts = carts.filter(cart => cart.fecha >= startOfMonth && cart.fecha < endOfMonth && cart.status === "Pagado");
+
+            // Calcular las ventas totales y el número de pedidos
+            const totalSales = monthlyCarts.reduce((sum, cart) => sum + cart.total, 0);
+            const totalOrders = monthlyCarts.length;
+
+            return { totalSales, totalOrders };
+        } catch (error) {
+            console.error("Error en calculateMonthlySales service:", error);
+            throw error;
+        }
+    }
+    //servicio para calcular y comparar las ventas del mes actual con el mes anterior
+    async calculateMonthlySalesComparison(): Promise<{ currentMonth: { totalSales: number, totalOrders: number }, previousMonth: { totalSales: number, totalOrders: number } }> {
+        try {
+            // Obtener todos los carritos
+            const carts = await this.cartRepository.findAllCarts();
+
+            // Obtener la fecha actual y el inicio del mes actual y anterior
+            const today = new Date();
+            const startOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            const endOfCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+            const startOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+            const endOfPreviousMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            // Filtrar carritos del mes actual y anterior que estén pagados
+            const currentMonthCarts = carts.filter(cart => cart.fecha >= startOfCurrentMonth && cart.fecha < endOfCurrentMonth && cart.status === "Pagado");
+            const previousMonthCarts = carts.filter(cart => cart.fecha >= startOfPreviousMonth && cart.fecha < endOfPreviousMonth && cart.status === "Pagado");
+
+            // Calcular ventas y pedidos del mes actual
+            const totalSalesCurrentMonth = currentMonthCarts.reduce((sum, cart) => sum + cart.total, 0);
+            const totalOrdersCurrentMonth = currentMonthCarts.length;
+
+            // Calcular ventas y pedidos del mes anterior
+            const totalSalesPreviousMonth = previousMonthCarts.reduce((sum, cart) => sum + cart.total, 0);
+            const totalOrdersPreviousMonth = previousMonthCarts.length;
+
+            return {
+                currentMonth: { totalSales: totalSalesCurrentMonth, totalOrders: totalOrdersCurrentMonth },
+                previousMonth: { totalSales: totalSalesPreviousMonth, totalOrders: totalOrdersPreviousMonth }
+            };
+        } catch (error) {
+            console.error("Error en calculateMonthlySalesComparison service:", error);
+            throw error;
+        }
+    }
 }
