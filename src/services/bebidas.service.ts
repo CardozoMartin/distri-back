@@ -153,6 +153,7 @@ export class BebidaService {
     async getDrinksWithLowStock(): Promise<IBebidas[]> {
         const Drinks = await this.bebidaRepo.findAllBebida();
         const lowStockDrinks = Drinks.map(drink => this.DetailDrinks(drink)).filter(drink => drink.stock < 10);
+        console.log("Bebidas con bajo stock desde el servicio:", lowStockDrinks);
         return lowStockDrinks;
     }
 }
