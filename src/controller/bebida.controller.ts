@@ -123,7 +123,6 @@ export class BebidaController {
     getDrinksWithLowStock = async (req: Request, res: Response): Promise<void> => {
         try {
             const bebidas = await this.bebidaService.getDrinksWithLowStock();
-            console.log("Bebidas con bajo stock desde el controlador:", bebidas);
             if (bebidas.length === 0) {
                 res.status(404).json({ message: 'No se encontraron bebidas con stock bajo 10 unidades' });
                 return;

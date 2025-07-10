@@ -202,7 +202,27 @@ export class CartService {
             throw error;
         }
     }
+  //servicio para mostrar las ventas y pedidos del dia actual
+    async getSalfesForDay(): Promise<ICart[]>{
+        try{
+            //obtenemos todos los carritos
+            const allCarts = await this.cartRepository.findAllCarts();
 
+            //obtenemos la fecha actual
+            const today = new Date();
+            //establecemos el inicio del dia
+            const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            //establecemos el final del dia
+            const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            //filtramos los carritos que son del dia actual y estan pagados
+            const dailyCarts = allCarts.filter(cart => cart.fecha >= startOfDay && cart.fecha < endOfDay && cart.status === "Pagado");
+
+            return dailyCarts;
+        } catch (error) {
+            console.error("Error en getSalesForDay service:", error);
+            throw error;
+        }
+    }
     async getCartsByUserId(userId: string): Promise<ICart[]> {
         try {
             return await this.cartRepository.findCartByUserId(userId);
@@ -441,4 +461,5 @@ export class CartService {
             throw error;
         }
     }
+  
 }

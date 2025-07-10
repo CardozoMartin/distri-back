@@ -10,6 +10,7 @@ import marcasRouter from '../routes/marca.routes'
 import cartRouter from '../routes/cart.routes'
 import clienteRouter from '../routes/cliente.routes'
 import empleadoRouter from '../routes/empleados.routes'
+import loginRouter from '../routes/login.route';
 
 
 // Singleton para manejar WebSocket globalmente
@@ -113,6 +114,7 @@ class Server {
         this.app.use('/api/cart', cartRouter);
         this.app.use('/api/clientes', clienteRouter);
         this.app.use('/api/empleados', empleadoRouter);
+        this.app.use('/api/login', loginRouter);
     }
 
     private configureSocket(): void {

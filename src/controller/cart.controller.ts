@@ -275,4 +275,31 @@ export class CartController {
             });
         }
     }
+
+    //controlador para obtener las ventas del dia actual
+    async getCurrentDaySales(req: Request, res: Response){
+        try {
+            // Llama al servicio para obtener las ventas del día actual
+            const currentDaySales = await this.cartService.getSalfesForDay();
+            // Verifica si se encontraron ventas para el día actual
+            if(!currentDaySales) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'No se encontraron ventas para el día actual'
+                });
+            }
+            // Devuelve las ventas del día actual
+            res.status(200).json({
+                message: 'Ventas del día actual obtenidas exitosamente',
+                data: currentDaySales
+            })
+        } catch (error) {
+            console.error("Error en getCurrentDaySales controller:", error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener las ventas del día actual',
+                error: error.message
+            });
+        }
+    }
 }

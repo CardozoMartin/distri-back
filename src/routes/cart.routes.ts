@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { CartController } from '../controller/cart.controller';
+import { TokenMiddleware } from '../middleware/token.middleware';
 
 const router = Router();
 const cartController = new CartController();
+const isAdmin = new TokenMiddleware()
 
 // Ruta para crear un nuevo carrito
 // POST /api/cart
@@ -12,8 +14,14 @@ router.post('/', (req, res) => {
 
 // Ruta para obtener un carrito por ID
 // GET /api/cart/:id
+
+//rutas publicas
 router.get('/saleforday', (req, res) => {
     cartController.getSalesData(req, res);
+});
+//obtenemos las ventas del dia actual y que esten pagadas
+router.get('/ventasdeldia', (req, res) => {
+    cartController.getCurrentDaySales(req, res);
 });
 router.get('/saleforweek', (req, res) => {
     cartController.getSalesComparison(req, res);
@@ -36,23 +44,25 @@ router.get('/user/:userId', (req, res) => {
 
 // Ruta para actualizar un carrito
 // PUT /api/cart/:id
-router.put('/:id', (req, res) => {
+
+//rutas privadas
+router.put('/:id', isAdmin.verifyAdminToken, (req, res) => {
     cartController.updateCart(req, res);
 });
 
 // Ruta para eliminar un carrito
 // DELETE /api/cart/:id
-router.delete('/:id', (req, res) => {
+router.delete('/:id', isAdmin.verifyAdminToken, (req, res) => {
     cartController.deleteCart(req, res);
 });
 
 // Ruta para procesar el pago de un carrito
 // POST /api/cart/:id/payment
-router.post('/:id/payment', (req, res) => {
+router.post('/:id/payment', isAdmin.verifyAdminToken, (req, res) => {
     cartController.processPayment(req, res);
 });
 
-router.post('/:id/changedelivery', (req, res) => {
+router.post('/:id/changedelivery', isAdmin.verifyAdminToken, (req, res) => {
     cartController.deliveryCart(req, res);
 })
 
