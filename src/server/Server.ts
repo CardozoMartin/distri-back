@@ -73,8 +73,8 @@ class Server {
                     'http://localhost:3000',
                     'http://127.0.0.1:3000',
                     'https://vhbpfn9n-5173.brs.devtunnels.ms',
-                    "https://admindistrinort.netlify.app/",
-                    "https://distrinort.netlify.app/"
+                    "https://admindistrinort.netlify.app",
+                    "https://distrinort.netlify.app"
                 ],
                 methods: ['GET', 'POST'],
                 credentials: true
