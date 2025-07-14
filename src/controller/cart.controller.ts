@@ -16,7 +16,7 @@ export class CartController {
             const cartData = req.body;
             console.log('Datos del carrito:', cartData);
             const newCart = await this.cartService.createCart(cartData);
-            
+
             return res.status(201).json({
                 success: true,
                 message: 'Carrito creado exitosamente',
@@ -66,7 +66,7 @@ export class CartController {
                 data: carts
             });
 
-        }   catch (error: any) {
+        } catch (error: any) {
             return res.status(500).json({
                 success: false,
                 message: 'Error al obtener los carritos',
@@ -92,7 +92,7 @@ export class CartController {
                 data: carts
             });
 
-        }   catch (error: any) {
+        } catch (error: any) {
             return res.status(500).json({
                 success: false,
                 message: 'Error al obtener los carritos',
@@ -106,7 +106,7 @@ export class CartController {
         try {
             const { id } = req.params;
             const cartData = req.body;
-            
+
             const updatedCart = await this.cartService.updateCart(id, cartData);
 
             if (!updatedCart) {
@@ -187,7 +187,7 @@ export class CartController {
 
     async deliveryCart(req: Request, res: Response) {
         try {
-            const { id} = req.params;
+            const { id } = req.params;
             const { delivered } = req.body;
 
             const deliveryCart = await this.cartService.updateCartDeliveryStatus(id, delivered);
@@ -205,7 +205,7 @@ export class CartController {
                 data: deliveryCart
             })
         } catch (error) {
-            
+
         }
     }
 
@@ -277,12 +277,12 @@ export class CartController {
     }
 
     //controlador para obtener las ventas del dia actual
-    async getCurrentDaySales(req: Request, res: Response){
+    async getCurrentDaySales(req: Request, res: Response) {
         try {
             // Llama al servicio para obtener las ventas del día actual
             const currentDaySales = await this.cartService.getSalfesForDay();
             // Verifica si se encontraron ventas para el día actual
-            if(!currentDaySales) {
+            if (!currentDaySales) {
                 return res.status(404).json({
                     success: false,
                     message: 'No se encontraron ventas para el día actual'
@@ -302,4 +302,48 @@ export class CartController {
             });
         }
     }
+
+    //controlador para cambiar el estado de la orden y enviar la notificaion
+    async changeOrderAndSendNotification(req: Request, res: Response) {
+        const { statusOrder } = req.body;
+        const { id } = req.params;
+
+        try {
+            const updatedCart = await this.cartService.changeCartAndNotifyForEmail(id, statusOrder);
+            return res.status(200).json({
+                success: true,
+                data: updatedCart
+            });
+        } catch (error: any) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al cambiar el estado de la orden',
+                error: error.message
+            });
+        }
+
+    }
+    //notificaion para cambiar el estado por whatsapp
+    async changerOrderForWhatsappNotification(req:Request,res:Response){
+
+        console.log(req.body)
+        try {
+            const { id } = req.params;
+            const { statusOrder } = req.body;
+
+            const updatedCart = await this.cartService.changeCartAndNotifyForWhatsapp(id, statusOrder);
+            return res.status(200).json({
+                success: true,
+                data: updatedCart
+            });
+        } catch (error) {
+            console.error("Error en changerOrderForWhatsappNotification controller:", error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error al cambiar el estado de la orden por WhatsApp',
+                error: error.message
+            });
+        }
+    }
+
 }

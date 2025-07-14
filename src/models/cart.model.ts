@@ -7,8 +7,10 @@ export interface ICart extends Document {
     status: string,
     fecha: Date,
     paymentMethod: string,
-    delivered: boolean
+    delivered: boolean,
+    statusOrder: 'pending' | 'accepted' | 'cancelled'
 }
+
 
 const cartSchema = new Schema({
     productos: [{
@@ -27,7 +29,12 @@ const cartSchema = new Schema({
     status: { type: String, required: true },
     fecha: { type: Date, required: true },
     paymentMethod: { type: String, required: true },
-    delivered: { type: Boolean, required: true }
+    delivered: { type: Boolean, required: true },
+    statusOrder: {
+        type: String,
+        enum: ['pending', 'accepted', 'cancelled'],
+        default: 'pending'
+    }
 })
 
 export default model<ICart>('Cart', cartSchema);

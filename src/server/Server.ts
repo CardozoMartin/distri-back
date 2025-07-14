@@ -11,6 +11,7 @@ import cartRouter from '../routes/cart.routes'
 import clienteRouter from '../routes/cliente.routes'
 import empleadoRouter from '../routes/empleados.routes'
 import loginRouter from '../routes/login.route';
+import { whatsappService } from '../services/whatsapp.service';
 
 
 // Singleton para manejar WebSocket globalmente
@@ -57,6 +58,7 @@ class Server {
     private io: SocketIOServer;
     private socketManager: SocketManager;
 
+
     constructor() {
         this.app = express();
         this.port = process.env.PORT || '4000';
@@ -88,6 +90,8 @@ class Server {
         this.middlewares();
         this.configureRoutes();
         this.configureSocket();
+        // Solo importa la instancia global, no crees una nueva
+        // El QR se mostrará automáticamente si es necesario
     }
 
     middlewares() {

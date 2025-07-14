@@ -46,6 +46,13 @@ router.get('/user/:userId', (req, res) => {
 // PUT /api/cart/:id
 
 //rutas privadas
+//ruta para cambiar el estado del carrito y notificar por email
+router.put('/changestateforemail/:id',  (req, res) => {
+    cartController.changeOrderAndSendNotification(req, res);})
+// Ruta para actualizar un carrito y notificar por whatsapp
+router.put('/changestateforwhatsapp/:id', (req, res) => {
+    cartController.changerOrderForWhatsappNotification(req, res);
+});
 router.put('/:id', isAdmin.verifyAdminToken, (req, res) => {
     cartController.updateCart(req, res);
 });
@@ -58,7 +65,7 @@ router.delete('/:id', isAdmin.verifyAdminToken, (req, res) => {
 
 // Ruta para procesar el pago de un carrito
 // POST /api/cart/:id/payment
-router.post('/:id/payment', isAdmin.verifyAdminToken, (req, res) => {
+router.post('/:id/payment',  (req, res) => {
     cartController.processPayment(req, res);
 });
 
