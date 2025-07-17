@@ -583,4 +583,32 @@ export class CartService {
     }
 }
 
+async getLastCartByPhone(phone: string): Promise<ICart | null> {
+    try {
+        // Primero buscamos todos los carritos
+        const carts = await this.getAllCarts();
+        
+        // Filtramos los carritos por el número de teléfono del cliente
+        // Nota: user es un array, así que necesitamos buscar dentro del array
+        const filteredCarts = carts.filter(cart => 
+            cart.user && 
+            cart.user.length > 0 && 
+            cart.user[0].phone === phone
+        );
+        
+        // Si no hay carritos filtrados retornamos null
+        if (filteredCarts.length === 0) {
+            return null;
+        }
+        
+        // Ordenamos los carritos por fecha de creación (más reciente primero)
+        filteredCarts.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+        
+        // Retornamos el último carrito
+        return filteredCarts[0];
+    } catch (error) {
+        throw new Error(`Error al obtener el ultimo carrito por telefono: ${error}`);
+    }
+}
+
 }
