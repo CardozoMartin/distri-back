@@ -324,7 +324,7 @@ export class CartController {
 
     }
     //notificaion para cambiar el estado por whatsapp
-    async changerOrderForWhatsappNotification(req:Request,res:Response){
+    async changerOrderForWhatsappNotification(req: Request, res: Response) {
 
         console.log(req.body)
         try {
@@ -346,4 +346,43 @@ export class CartController {
         }
     }
 
+    //controlador para obtener carrito por su numero y devolver el ultimo carrito
+   async getCartByPhone(req: Request, res: Response) {
+    try {
+        // Obtenemos el número de teléfono de los parámetros de la URL
+        const { phone } = req.params;
+        
+        // Validamos que el parámetro phone esté presente
+        if (!phone) {
+            return res.status(400).json({
+                success: false,
+                message: 'El número de teléfono es requerido'
+            });
+        }
+        
+        // Llamamos al servicio para obtener el carrito por teléfono
+        const cart = await this.cartService.getLastCartByPhone(phone);
+        
+        // Verificamos si el carrito existe
+        if (!cart) {
+            return res.status(404).json({
+                success: false,
+                message: 'Carrito no encontrado para el número de teléfono proporcionado'
+            });
+        }
+        
+        // Devolvemos el carrito encontrado
+        return res.status(200).json({
+            success: true,
+            data: cart
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener el carrito por número de teléfono',
+            error: error.message
+        });
+    }
 }
+
+    }
