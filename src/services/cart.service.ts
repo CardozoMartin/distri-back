@@ -496,19 +496,11 @@ export class CartService {
                 const updatedCart = await this.cartRepository.updateCart(id, { statusOrder: statusOrder });
                 console.log('pudo actualizar elcarro {{', updatedCart, '}}');
                 //enviamos la notificacion por whatsapp-web-js
-<<<<<<< HEAD
                 if (statusOrder === 'accepted') {
                     this.notificationService.notifyClienteOrderAccepted(cart.user, cart);
                 } else {
                     this.notificationService.notifyClienteOrderCancelled(cart.user, cart);
                 }
-=======
-               if (statusOrder === 'accepted') {
-                   this.notificationEmail.notifyClienteOrderAccepted(cart.user, cart);
-               } else {
-                   this.notificationEmail.notifyClienteOrderCancelled(cart.user, cart);
-               }
->>>>>>> 55efcb14c476d21c11c5b4b65e0d6d8679850478
 
 
                 return updatedCart;

@@ -346,12 +346,8 @@ export class CartController {
         }
     }
 
-<<<<<<< HEAD
     //controlador para obtener carrito por su numero y devolver el ultimo carrito
    async getCartByPhone(req: Request, res: Response) {
-=======
-    async getCartByPhone(req: Request, res: Response) {
->>>>>>> 55efcb14c476d21c11c5b4b65e0d6d8679850478
     try {
         // Obtenemos el número de teléfono de los parámetros de la URL
         const { phone } = req.params;
