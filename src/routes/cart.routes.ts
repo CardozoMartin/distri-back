@@ -43,6 +43,10 @@ router.get('/user/:userId', (req, res) => {
 });
 
 router.get('/lastcart/:phone', (req, res) => {
+    cartController.getCartByPhone(req, res);
+});
+
+router.get('/lastcart/:phone', (req, res) => {
     cartController.getCartByPhone(req, res);});
 
 // Ruta para actualizar un carrito

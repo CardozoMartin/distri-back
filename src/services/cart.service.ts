@@ -1,6 +1,7 @@
 // services/cart.service.ts
 import { ICart } from "../models/cart.model";
 import { CartRepository, ICartRepository } from "../repositories/cart.repository";
+import { NotificationService } from "../repositories/notificacion.repository";
 import { BebidaService } from "./bebidas.service";
 import { EmailService } from "./email.service";
 import { whatsappService } from "./whatsapp.service";
@@ -11,13 +12,19 @@ export class CartService {
     private bebidaService: BebidaService;
     private notificationService;
     private notificationWhatsapp;
+<<<<<<< HEAD
 
+=======
+    private notificationEmail;
+   
+>>>>>>> 55efcb14c476d21c11c5b4b65e0d6d8679850478
 
     constructor() {
         this.cartRepository = new CartRepository();
         this.bebidaService = new BebidaService();
-        this.notificationService = new EmailService();
+        this.notificationService = new NotificationService()
         this.notificationWhatsapp = whatsappService;
+        this.notificationEmail = new EmailService();
     }
 
     // Crear un nuevo carrito
@@ -489,11 +496,19 @@ export class CartService {
                 const updatedCart = await this.cartRepository.updateCart(id, { statusOrder: statusOrder });
                 console.log('pudo actualizar elcarro {{', updatedCart, '}}');
                 //enviamos la notificacion por whatsapp-web-js
+<<<<<<< HEAD
                 if (statusOrder === 'accepted') {
                     this.notificationService.notifyClienteOrderAccepted(cart.user, cart);
                 } else {
                     this.notificationService.notifyClienteOrderCancelled(cart.user, cart);
                 }
+=======
+               if (statusOrder === 'accepted') {
+                   this.notificationEmail.notifyClienteOrderAccepted(cart.user, cart);
+               } else {
+                   this.notificationEmail.notifyClienteOrderCancelled(cart.user, cart);
+               }
+>>>>>>> 55efcb14c476d21c11c5b4b65e0d6d8679850478
 
 
                 return updatedCart;
@@ -611,5 +626,7 @@ export class CartService {
         throw new Error(`Error al obtener el ultimo carrito por telefono: ${error}`);
     }
 }
+
+
 
 }
