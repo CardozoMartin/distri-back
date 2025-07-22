@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.cjs --minify",
+    "build": "npm install && esbuild src/index.ts --bundle --platform=node --outfile=dist/index.cjs --minify --external:puppeteer",
     "start": "node dist/index.cjs",
     "lint": "prettier . -w && eslint . --fix"
   },
@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {
+   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -22,7 +22,8 @@
     "nodemailer": "^7.0.5",
     "qrcode-terminal": "^0.12.0",
     "socket.io": "^4.8.1",
-    "whatsapp-web.js": "^1.31.0"
+    "whatsapp-web.js": "^1.31.0",
+    "puppeteer": "^21.11.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
