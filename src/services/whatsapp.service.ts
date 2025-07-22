@@ -7,7 +7,7 @@ class WhatsAppService {
     constructor() {
         this.client = new Client({
             authStrategy: new LocalAuth(),
-            puppeteer: { 
+            puppeteer: {
                 headless: true,
                 args: [
                     '--no-sandbox',
@@ -17,30 +17,42 @@ class WhatsAppService {
                     '--no-first-run',
                     '--no-zygote',
                     '--single-process',
-                    '--disable-gpu'
+                    '--disable-gpu',
+                    '--disable-extensions'
                 ],
-                executablePath: process.env.CHROME_BIN || '/usr/bin/chromium-browser'
+                // Especifica múltiples rutas posibles para Chrome
+                executablePath: this.getChromePath()
             }
         });
+    }
+        private getChromePath(): string {
+        // Lista de posibles ubicaciones de Chrome en diferentes sistemas
+        const possiblePaths = [
+            process.env.CHROME_BIN,
+            process.env.GOOGLE_CHROME_BIN,
+            '/usr/bin/google-chrome',
+            '/usr/bin/google-chrome-stable',
+            '/usr/bin/chromium-browser',
+            '/usr/bin/chromium',
+            '/snap/bin/chromium'
+        ];
 
-        this.client.on('qr', (qr) => {
-            qrcode.generate(qr, { small: true });
-            console.log('Escanea este QR con WhatsApp para autenticar.');
-        });
+        // Retorna la primera ruta que exista
+        for (const path of possiblePaths) {
+            if (path) {
+                try {
+                    const fs = require('fs');
+                    if (fs.existsSync(path)) {
+                        return path;
+                    }
+                } catch (error) {
+                    continue;
+                }
+            }
+        }
 
-        this.client.on('ready', () => {
-            console.log('WhatsApp Web client is ready!');
-        });
-
-        this.client.on('auth_failure', (msg) => {
-            console.error('Authentication failed:', msg);
-        });
-
-        this.client.on('disconnected', (reason) => {
-            console.log('Client was logged out:', reason);
-        });
-
-        this.client.initialize();
+        // Si no encuentra ninguna, usa una por defecto
+        return '/usr/bin/google-chrome';
     }
 
     async sendMessage(phone: string, message: string) {
