@@ -12,12 +12,6 @@ export class CartService {
     private bebidaService: BebidaService;
     private notificationService;
     private notificationWhatsapp;
-<<<<<<< HEAD
-
-=======
-    private notificationEmail;
-   
->>>>>>> 55efcb14c476d21c11c5b4b65e0d6d8679850478
 
     constructor() {
         this.cartRepository = new CartRepository();
