@@ -8,7 +8,7 @@ export interface IMarca extends Document {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
+//se agrega modelo
 // Schema definition
 const MarcaSchema = new Schema<IMarca>(
   {
