@@ -12,6 +12,7 @@ export class CartService {
     private bebidaService: BebidaService;
     private notificationService;
     private notificationWhatsapp;
+    private notificationEmail;
 
     constructor() {
         this.cartRepository = new CartRepository();
@@ -491,9 +492,9 @@ export class CartService {
                 console.log('pudo actualizar elcarro {{', updatedCart, '}}');
                 //enviamos la notificacion por whatsapp-web-js
                 if (statusOrder === 'accepted') {
-                    this.notificationService.notifyClienteOrderAccepted(cart.user, cart);
+                    this.notificationEmail.notifyClienteOrderAccepted(cart.user, cart);
                 } else {
-                    this.notificationService.notifyClienteOrderCancelled(cart.user, cart);
+                    this.notificationEmail.notifyClienteOrderCancelled(cart.user, cart);
                 }
 
 

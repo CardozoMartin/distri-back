@@ -29,7 +29,9 @@ router.put('/:id', isAdmin.verifyAdminToken,
     (req: Request, res: Response, next: NextFunction) => {
         validateBody.validatePutBody(req, res, next, put_schemaBebida);
     }, bebidaController.putBebida);
-router.put('/drinkState/:id', isAdmin.verifyAdminToken, bebidaController.changeStateDrink)
+
+
+router.put('/drinkState/:id', bebidaController.changeStateDrink)
 
 // rutas para eliminar una bebida fisica o logica
 
