@@ -57,9 +57,9 @@ router.get('/lastcart/:phone', (req, res) => {
 router.put('/changestateforemail/:id',  (req, res) => {
     cartController.changeOrderAndSendNotification(req, res);})
 // Ruta para actualizar un carrito y notificar por whatsapp
-router.put('/changestateforwhatsapp/:id', (req, res) => {
-    cartController.changerOrderForWhatsappNotification(req, res);
-});
+// router.put('/changestateforwhatsapp/:id', (req, res) => {
+//     cartController.changerOrderForWhatsappNotification(req, res);
+// });
 router.put('/:id', isAdmin.verifyAdminToken, (req, res) => {
     cartController.updateCart(req, res);
 });

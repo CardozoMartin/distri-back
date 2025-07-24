@@ -507,82 +507,82 @@ export class CartService {
         return null;
     }
 
-    async changeCartAndNotifyForWhatsapp(id: string, statusOrder: 'accepted' | 'cancelled'): Promise<ICart | null> {
-        try {
-            // Paso 1: Buscar el carrito por el id
-            const cart = await this.cartRepository.findCartById(id);
-            if (!cart) {
-                throw new Error('Carrito no encontrado');
-            }
+    // async changeCartAndNotifyForWhatsapp(id: string, statusOrder: 'accepted' | 'cancelled'): Promise<ICart | null> {
+    //     try {
+    //         // Paso 1: Buscar el carrito por el id
+    //         const cart = await this.cartRepository.findCartById(id);
+    //         if (!cart) {
+    //             throw new Error('Carrito no encontrado');
+    //         }
 
 
 
-            // Paso 2: Verificar si el estado es pendiente y el nuevo estado es válido
-            if (cart.statusOrder !== 'pending') {
+    //         // Paso 2: Verificar si el estado es pendiente y el nuevo estado es válido
+    //         if (cart.statusOrder !== 'pending') {
 
-                return null;
-            }
+    //             return null;
+    //         }
 
-            if (statusOrder !== 'accepted' && statusOrder !== 'cancelled') {
-                throw new Error('Estado no válido');
-            }
+    //         if (statusOrder !== 'accepted' && statusOrder !== 'cancelled') {
+    //             throw new Error('Estado no válido');
+    //         }
 
-            // Paso 3: Actualizar el carrito PRIMERO
-            const updatedCart = await this.cartRepository.updateCart(id, { statusOrder: statusOrder });
-
-
-            // Paso 4: Obtener el destinatario (soporta array u objeto)
-            const destinatario = Array.isArray(cart.user) ? cart.user[0] : cart.user;
+    //         // Paso 3: Actualizar el carrito PRIMERO
+    //         const updatedCart = await this.cartRepository.updateCart(id, { statusOrder: statusOrder });
 
 
-            // Paso 5: Verificar que tenga teléfono
-            if (!destinatario || !destinatario.phone) {
-                console.log('No se puede enviar WhatsApp: el cliente no tiene teléfono definido');
-                return updatedCart; // Retorna el carrito actualizado aunque no se envíe el mensaje
-            }
-
-            // Paso 6: Formatear el teléfono para WhatsApp
-            let phone = destinatario.phone.toString().replace(/[^0-9]/g, '');
+    //         // Paso 4: Obtener el destinatario (soporta array u objeto)
+    //         const destinatario = Array.isArray(cart.user) ? cart.user[0] : cart.user;
 
 
-            // Para Argentina: convertir número local a formato internacional WhatsApp
-            // Ejemplo: 3812032666 -> 5493812032666
-            if (phone.length === 10 && phone.startsWith('381')) {
-                // Es un número de Tucumán, convertir a formato internacional
-                phone = '549' + phone;
-            } else if (phone.length === 10 && !phone.startsWith('54')) {
-                // Es un número argentino de 10 dígitos, agregar 549
-                phone = '549' + phone;
-            }
+    //         // Paso 5: Verificar que tenga teléfono
+    //         if (!destinatario || !destinatario.phone) {
+    //             console.log('No se puede enviar WhatsApp: el cliente no tiene teléfono definido');
+    //             return updatedCart; // Retorna el carrito actualizado aunque no se envíe el mensaje
+    //         }
+
+    //         // Paso 6: Formatear el teléfono para WhatsApp
+    //         let phone = destinatario.phone.toString().replace(/[^0-9]/g, '');
 
 
-
-            // Paso 7: Crear el mensaje
-            let mensaje;
-            if (statusOrder === 'accepted') {
-                mensaje = `Hola ${destinatario.name || 'Cliente'}, tu pedido ha sido aceptado. ¡Gracias por tu compra!`;
-            } else {
-                mensaje = `Hola ${destinatario.name || 'Cliente'}, lamentamos informarte que tu pedido ha sido cancelado.`;
-            }
+    //         // Para Argentina: convertir número local a formato internacional WhatsApp
+    //         // Ejemplo: 3812032666 -> 5493812032666
+    //         if (phone.length === 10 && phone.startsWith('381')) {
+    //             // Es un número de Tucumán, convertir a formato internacional
+    //             phone = '549' + phone;
+    //         } else if (phone.length === 10 && !phone.startsWith('54')) {
+    //             // Es un número argentino de 10 dígitos, agregar 549
+    //             phone = '549' + phone;
+    //         }
 
 
 
-            // Paso 8: Enviar el mensaje por WhatsApp
-            try {
-                await this.notificationWhatsapp.sendMessage(phone, mensaje);
+    //         // Paso 7: Crear el mensaje
+    //         let mensaje;
+    //         if (statusOrder === 'accepted') {
+    //             mensaje = `Hola ${destinatario.name || 'Cliente'}, tu pedido ha sido aceptado. ¡Gracias por tu compra!`;
+    //         } else {
+    //             mensaje = `Hola ${destinatario.name || 'Cliente'}, lamentamos informarte que tu pedido ha sido cancelado.`;
+    //         }
 
-            } catch (whatsappError) {
 
-                // No lanzamos el error para que el método continúe y retorne el carrito actualizado
-            }
 
-            return updatedCart;
+    //         // Paso 8: Enviar el mensaje por WhatsApp
+    //         try {
+    //             await this.notificationWhatsapp.sendMessage(phone, mensaje);
 
-        } catch (error) {
+    //         } catch (whatsappError) {
 
-            throw error; // Re-lanzamos el error para que el controlador pueda manejarlo
-        }
-    }
+    //             // No lanzamos el error para que el método continúe y retorne el carrito actualizado
+    //         }
+
+    //         return updatedCart;
+
+    //     } catch (error) {
+
+    //         throw error; // Re-lanzamos el error para que el controlador pueda manejarlo
+    //     }
+    // }
 
     //servicio para buscar un carrito por el numero de telefono del cliente y devolver el ultimo carrito
    async getLastCartByPhone(phone: string): Promise<ICart | null> {

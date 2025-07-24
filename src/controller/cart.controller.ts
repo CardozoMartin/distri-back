@@ -324,27 +324,27 @@ export class CartController {
 
     }
     //notificaion para cambiar el estado por whatsapp
-    async changerOrderForWhatsappNotification(req: Request, res: Response) {
+    // async changerOrderForWhatsappNotification(req: Request, res: Response) {
 
-        console.log(req.body)
-        try {
-            const { id } = req.params;
-            const { statusOrder } = req.body;
+    //     console.log(req.body)
+    //     try {
+    //         const { id } = req.params;
+    //         const { statusOrder } = req.body;
 
-            const updatedCart = await this.cartService.changeCartAndNotifyForWhatsapp(id, statusOrder);
-            return res.status(200).json({
-                success: true,
-                data: updatedCart
-            });
-        } catch (error) {
-            console.error("Error en changerOrderForWhatsappNotification controller:", error);
-            return res.status(500).json({
-                success: false,
-                message: 'Error al cambiar el estado de la orden por WhatsApp',
-                error: error.message
-            });
-        }
-    }
+    //         const updatedCart = await this.cartService.changeCartAndNotifyForWhatsapp(id, statusOrder);
+    //         return res.status(200).json({
+    //             success: true,
+    //             data: updatedCart
+    //         });
+    //     } catch (error) {
+    //         console.error("Error en changerOrderForWhatsappNotification controller:", error);
+    //         return res.status(500).json({
+    //             success: false,
+    //             message: 'Error al cambiar el estado de la orden por WhatsApp',
+    //             error: error.message
+    //         });
+    //     }
+    // }
 
     //controlador para obtener carrito por su numero y devolver el ultimo carrito
    async getCartByPhone(req: Request, res: Response) {

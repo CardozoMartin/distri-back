@@ -11,7 +11,7 @@ import cartRouter from '../routes/cart.routes'
 import clienteRouter from '../routes/cliente.routes'
 import empleadoRouter from '../routes/empleados.routes'
 import loginRouter from '../routes/login.route';
-import { whatsappService } from '../services/whatsapp.service';
+// import { whatsappService } from '../services/whatsapp.service';
 
 
 // Singleton para manejar WebSocket globalmente
